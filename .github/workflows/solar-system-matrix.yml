@@ -21,7 +21,7 @@ jobs:
             max-parallel: 2
             matrix:
                 nodejs-version: [18, 20]
-                os: [ubuntu-latest, macos-latest]
+                os: [ubuntu-latest, windows-latest]
         steps:
         - name: Checkout Repository
           uses: actions/checkout@v4
@@ -42,3 +42,28 @@ jobs:
           with:
             name: Mocha-Test-Result
             path: test-results-${{ matrix.nodejs-version }}.xml
+
+    code-coverage:
+        name: Code Coverage
+        runs-on: ubuntu-latest
+        steps:
+        - name: Checkout Repository
+          uses: actions/checkout@v4
+
+        - name: Setup NodeJS Version
+          uses: actions/setup-node@v3
+          with:
+            node-version: 20
+    
+        - name: Install Dependencies
+          run: npm install
+    
+        - name: Code Coverage
+          run: npm run coverage
+
+        - name: Archive Coverage Report
+          uses: actions/upload-artifact@v4
+          with:
+            name: Coverage-Report
+            path: coverage
+            rentention-days: 5
