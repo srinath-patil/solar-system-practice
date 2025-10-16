@@ -91,6 +91,8 @@ jobs:
     docker:
         name: Containerization
         runs-on: ubuntu-latest
+        permissions:
+            packages: write
         needs: [unit-testing, code-coverage]
 
         steps:
@@ -103,12 +105,19 @@ jobs:
             username: ${{ vars.DOCKERHUB_USERNAME }}
             password: ${{ secrets.DOCKERHUB_SECRET }}
 
+        - name: GHCR login
+          uses: docker/login-action@v3
+          with:
+            registry: ghcr.io
+            username: ${{ github.repository_owner }}
+            password: ${{ secrets.GITHUB_TOKEN }}
+
         - name: Build Docker Image
           uses: docker/build-push-action@v4
           with:
             context: .
             push: false
-            tags: ${{ vars.DOCKERHUB_USERNAME }}/solar-system:latest
+            tags: ${{ vars.DOCKERHUB_USERNAME }}/solar-system:{{ github.sha }}
             file: ./Dockerfile
 
         - name: Docker Image testing
@@ -123,12 +132,13 @@ jobs:
                 ${{ vars.DOCKERHUB_USERNAME }}/solar-system:latest
   
             echo Testing app is live 
-            wget -qO - http://localhost:3000/planets | grep "planets" 
+            wget -qO - http://127.0.0.1:3000/planets | grep "planets" 
         
         - name: Push Docker Image to Docker Hub
           uses: docker/build-push-action@v4
           with:
             context: .
             push: true
-            tags: ${{ vars.DOCKERHUB_USERNAME }}/solar-system:latest
-            file: ./Dockerfile
+            tags: |
+                ${{ vars.DOCKERHUB_USERNAME }}/solar-system:${{ github.sha}}
+                ghcr.io/${{ vars.github.repository_owner }}/solar-system:${{ github.sha }}
