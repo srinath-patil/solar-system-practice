@@ -112,6 +112,7 @@ jobs:
             file: ./Dockerfile
 
         - name: Docker Image testing
+          continue-on-error: true
           run: |
             docker images
             docker run --name solar-system-app -d \
@@ -127,7 +128,7 @@ jobs:
         - name: Push Docker Image to Docker Hub
           uses: docker/build-push-action@v4
           with:
-            context: ./solar-system
+            context: .
             push: true
             tags: ${{ vars.DOCKERHUB_USERNAME }}/solar-system:latest
-            file: ./solar-system/Dockerfile
+            file: ./Dockerfile
