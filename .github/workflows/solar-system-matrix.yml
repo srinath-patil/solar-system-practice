@@ -25,6 +25,8 @@ jobs:
                 exclude:
                     - os: windows-latest
                       nodejs-version: 18
+                    - os: windows-latest
+                      nodejs-version: 20
         steps:
         - name: Checkout Repository
           uses: actions/checkout@v4
@@ -104,10 +106,10 @@ jobs:
         - name: Build Docker Image
           uses: docker/build-push-action@v4
           with:
-            context: .
+            context: ./solar-system
             push: false
             tags: ${{ vars.DOCKERHUB_USERNAME }}/solar-system:latest
-            file: /Dockerfile
+            file: ./solar-system/Dockerfile
 
         - name: Docker Image testing
           run: |
