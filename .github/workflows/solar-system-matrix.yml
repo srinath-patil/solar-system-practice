@@ -142,3 +142,29 @@ jobs:
             tags: |
                 ${{ vars.DOCKERHUB_USERNAME }}/solar-system:${{ github.sha}}
                 ghcr.io/${{ github.repository_owner }}/solar-system:${{ github.sha }}
+
+    deploy:
+        name: Deploy to Kubernetes
+        runs-on: ubuntu-latest
+        needs: docker
+        steps:
+        - name: Checkout Repository
+          uses: actions/checkout@v4
+
+        - name: Setup kubectl
+          uses: azure/setup-kubectl@v3
+          with:
+            version: 'latest'
+
+        - name: Configure Kubeconfig
+          uses: azure/k8s-set-context@v3
+          with:
+            method: 'kubeconfig'
+            kubeconfig: ${{ secrets.KUBECONFIG }}
+
+        - name: Fetch Kubernetes Cluster details
+          run: |
+            kubectl version --short
+            echo ------------------------------------
+            kubectl get nodes
+            
