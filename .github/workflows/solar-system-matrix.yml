@@ -201,7 +201,8 @@ jobs:
               --from-literal=mongo-username='${{ vars.MONGO_USERNAME }}' \
               --from-literal=mongo-password='${{ secrets.MONGO_PASSWORD }}' \
               --namespace=${{ vars.NAMESPACE }} \
-              --dry-run=client -o yaml | kubectl apply -f -
+              --dry-run=client \
+              -o yaml | kubectl apply -f -
         
         - name: Deploy to Kubernetes Cluster
           run: |
