@@ -197,7 +197,7 @@ jobs:
         - name: Create MongoDB Secret
           run: |
             kubectl create secret generic mongo-credentials \
-              --from-literal=mongo-uri= ${{ env.MONGO_URI }} \
+              --from-literal=mongo-uri=${{ env.MONGO_URI }} \
               --from-literal=mongo-username='${{ vars.MONGO_USERNAME }}' \
               --from-literal=mongo-password='${{ secrets.MONGO_PASSWORD }}' \
               --namespace=${{ vars.NAMESPACE }} \
