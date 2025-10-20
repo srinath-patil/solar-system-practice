@@ -173,6 +173,7 @@ jobs:
             kubectl version --short
             echo ------------------------------------
             kubectl get nodes
+            
         
         - name: Save ingress ip as env varaiable
           run: |
