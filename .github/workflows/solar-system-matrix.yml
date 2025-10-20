@@ -170,10 +170,10 @@ jobs:
 
         - name: Fetch Kubernetes Cluster details
           run: |
-            kubectl version --short
+            kubectl version
             echo ------------------------------------
             kubectl get nodes
-            
+
         
         - name: Save ingress ip as env varaiable
           run: |
