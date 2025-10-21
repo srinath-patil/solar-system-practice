@@ -212,7 +212,7 @@ jobs:
         - name: Fetch ingress host URL
           id: fetch-ingress-host
           run: |
-            echo "INGRESS_HOST=$(kubectl -n ${{ vars.NAMESPACE }} get ingress -o jsonpath="{.items[0].spec.tls[0].hosts[0]}")" >> $GITHUB_OUTPUT
+            echo "INGRESS_HOST=$(kubectl -n ${{ vars.NAMESPACE }} get ingress -o jsonpath='{.items[0].spec.tls[0].hosts[0]}')" >> $GITHUB_OUTPUT
 
 
     Integration-Test:
